@@ -13,6 +13,7 @@ use std::fs::{self, File};
 use std::path::{Path, PathBuf};
 
 use crate::utils::fs::get_404_output_file;
+use clap::builder::OsStr;
 use handlebars::Handlebars;
 use log::{debug, trace, warn};
 use once_cell::sync::Lazy;
@@ -94,6 +95,11 @@ impl HtmlHandlebars {
         };
 
         ctx.data.insert("path".to_owned(), json!(path));
+        ctx.data.insert("dir".to_owned(), json!(path.parent()));
+        ctx.data.insert(
+            "file_stem".to_owned(),
+            json!(path.file_stem().unwrap_or(&OsStr::from("")).to_str()),
+        );
         ctx.data.insert("content".to_owned(), json!(content));
         ctx.data.insert("chapter_title".to_owned(), json!(ch.name));
         ctx.data.insert("title".to_owned(), json!(title));
